@@ -1,0 +1,28 @@
+kind: pipeline
+type: docker
+name: build
+
+steps:
+ - name: build-deploy
+   image: plugins/docker:20.17.4 # https://github.com/drone-plugins/drone-docker/issues/414
+   environment:
+     BUILD_TAG:
+       from_secret:
+         tag
+   settings:
+      dockerfile: Backend/Api/Host/Dockerfile
+      context: ./Backend
+      registry:
+        from_secret: docker_registry_host
+      repo:
+        from_secret: docker_repository
+      username:
+        from_secret: docker_registry_username
+      password:
+        from_secret: docker_registry_password
+      build_args_from_env:
+        - BUILD_TAG
+      build_args:
+        - BUILD_NUMBER=${DRONE_BUILD_NUMBER}
+      tags:
+        - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}
