@@ -7,18 +7,28 @@ namespace Bjay.Api.Repositories.Implementation;
 
 public class ActivitiesRepository(DatabaseContext context) : BaseRepository(context), IActivitiesRepository
 {
-    public async Task<(int size, IEnumerable<ActivityRecord> results)> GetListAsync(int page, int limit)
+    public async Task<(int size, IEnumerable<ActivityRecord> results)> GetListAsync(int? searchType, int page, int limit)
     {
         if (page < 1 || limit < 1)
         {
             throw new ArgumentException("Page and Limit must be positive integers.");
         }
 
-        var size = await _context.Activities.CountAsync();
+        IQueryable<ActivityRecord> query = _context.Activities.OrderByDescending(p => p.StartTime);
+        if (searchType.HasValue)
+        {
+            if (searchType < 1)
+            {
+                throw new ArgumentException("Search Type must be a positive integer.");
+            }
+
+            query = _context.Activities.Where(a => a.Type == searchType);
+        }
+
+        var size = await query.CountAsync();
 
         var offset = (page - 1) * limit;
-        var results = await _context.Activities
-            .OrderByDescending(p => p.StartTime)
+        var results = await query
             .Skip(offset)
             .Take(limit)
             .ToListAsync();

@@ -2,6 +2,7 @@
 
 using Bjay.Api.Host.Requests;
 using Bjay.Api.Services.Contracts.Entities;
+using Bjay.Api.Services.Contracts.Entities.Activities;
 
 namespace Bjay.Api.Host;
 

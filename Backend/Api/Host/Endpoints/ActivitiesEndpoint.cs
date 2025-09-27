@@ -4,6 +4,8 @@ using FluentValidation;
 using Bjay.Api.Host.Requests;
 using Bjay.Api.Services.Contracts;
 using Bjay.Api.Services.Contracts.Entities;
+using Bjay.Api.Host.Requests.Activity;
+using Bjay.Api.Services.Contracts.Entities.Activities;
 
 namespace Bjay.Api.Host;
 
@@ -14,9 +16,9 @@ public static class ActivitiesEndpoint
         var group = builder.MapGroup("api/activities")
             .WithTags("activities");
 
-        group.MapGet("/", async (IMapper mapper, IActivityService service, [AsParameters] PaginationRequest request) =>
+        group.MapGet("/", async (IMapper mapper, IActivityService service, [AsParameters] ActivityPaginationRequest request) =>
         {
-            var paginationEntity = new PaginationEntity(request.Page, request.Limit);
+            var paginationEntity = new ActivityPaginationEntity(request.Type, request.Page, request.Limit);
             var result = await service.GetListAsync(paginationEntity);
             return mapper.Map<PaginationResponse<ActivityResponse>>(result);
         });

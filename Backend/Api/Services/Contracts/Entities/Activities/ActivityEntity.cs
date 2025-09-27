@@ -1,6 +1,4 @@
-﻿using Bjay.Api.Services.Contracts.Entities.Activities;
-
-namespace Bjay.Api.Services.Contracts.Entities;
+﻿namespace Bjay.Api.Services.Contracts.Entities.Activities;
 
 public class ActivityEntity
 {

@@ -4,14 +4,16 @@ using Bjay.Api.Repositories.Contracts;
 using Bjay.Api.Repositories.Contracts.Records;
 using Bjay.Api.Services.Contracts;
 using Bjay.Api.Services.Contracts.Entities;
+using Bjay.Api.Services.Contracts.Entities.Activities;
 
 namespace Bjay.Api.Services.Implementation.Services;
 
 public class ActivityService(IMapper mapper, IActivitiesRepository activitiesRepository) : IActivityService
 {
-    public async Task<PaginationResultEntity<ActivityEntity>> GetListAsync(PaginationEntity pagination)
+    public async Task<PaginationResultEntity<ActivityEntity>> GetListAsync(ActivityPaginationEntity pagination)
     {
-        var (size, foundRecords) = await activitiesRepository.GetListAsync(pagination.Page, pagination.Limit);
+        var searchType = (int?)pagination.Type;
+        var (size, foundRecords) = await activitiesRepository.GetListAsync(searchType, pagination.Page, pagination.Limit);
 
         var resultRecords = mapper.Map<IEnumerable<ActivityEntity>>(foundRecords);
 

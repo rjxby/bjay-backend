@@ -8,7 +8,7 @@ public interface IActivitiesRepository
 
     Task<ActivityRecord> CreateAsync(ActivityRecord record);
 
-    Task<(int size, IEnumerable<ActivityRecord> results)> GetListAsync(int page, int limit);
+    Task<(int size, IEnumerable<ActivityRecord> results)> GetListAsync(int? searchType, int page, int limit);
 
     Task<ActivityRecord> UpdateAsync(ActivityRecord record);
 
